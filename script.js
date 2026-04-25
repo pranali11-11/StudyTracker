@@ -1,6 +1,13 @@
 import { signupUser, loginUser, logoutUser, monitorAuthState } from './authService.js';
-import { markTaskDoneFirestore } from './taskService.js';
-import { subscribeToAnalytics } from './analyticsService.js';
+import { 
+    createTaskFirestore, 
+    fetchTasksFirestore, 
+    delTaskFirestore, 
+    markTaskDoneFirestore 
+} from './taskService.js';
+import { 
+    subscribeToAnalytics
+} from './analyticsService.js';
 import Chart from 'chart.js/auto';
 
 let currentUserUid = null;
@@ -120,6 +127,8 @@ const authError = document.getElementById('auth-error');
 const displayNameInput = document.getElementById('displayName');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
+const confirmPasswordGroup = document.getElementById('confirm-password-group');
+const confirmPasswordInput = document.getElementById('confirmPassword');
 
 let isSignupMode = false;
 
@@ -133,14 +142,18 @@ toggleSignupBtn.addEventListener('click', (e) => {
         authTitle.textContent = "Create an Account";
         authSubtitle.textContent = "Sign up to start planning";
         nameGroup.style.display = "block";
+        confirmPasswordGroup.style.display = "block";
         displayNameInput.required = true;
+        confirmPasswordInput.required = true;
         authSubmitBtn.textContent = "Sign Up";
         toggleSignupBtn.textContent = "Log in instead";
     } else {
         authTitle.textContent = "Welcome Back!";
         authSubtitle.textContent = "Log in to access your study planner";
         nameGroup.style.display = "none";
+        confirmPasswordGroup.style.display = "none";
         displayNameInput.required = false;
+        confirmPasswordInput.required = false;
         authSubmitBtn.textContent = "Log In";
         toggleSignupBtn.textContent = "Sign up";
     }
@@ -155,10 +168,14 @@ loginForm.addEventListener('submit', async (e) => {
 
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
+    const confirmPassword = confirmPasswordInput.value.trim();
     const displayName = displayNameInput.value.trim();
 
     try {
         if (isSignupMode) {
+            if (password !== confirmPassword) {
+                throw new Error("Passwords do not match.");
+            }
             await signupUser(email, password, displayName);
         } else {
             await loginUser(email, password);
@@ -192,8 +209,15 @@ monitorAuthState((user) => {
         
         // Update user profile display
         const nameToDisplay = user.displayName || user.email.split('@')[0];
+        const avatarChar = nameToDisplay.charAt(0).toUpperCase();
+        
+        // Desktop
         document.querySelector('.user-name').textContent = nameToDisplay;
-        document.querySelector('.user-avatar').textContent = nameToDisplay.charAt(0).toUpperCase();
+        document.querySelector('.user-avatar').textContent = avatarChar;
+        
+        // Mobile
+        const mobileAvatar = document.getElementById('mobile-avatar');
+        if (mobileAvatar) mobileAvatar.textContent = avatarChar;
         
         // Reset form for next logout/login
         loginForm.reset();
@@ -203,6 +227,14 @@ monitorAuthState((user) => {
         // Start Real-Time Analytics
         if (analyticsUnsubscribe) analyticsUnsubscribe();
         analyticsUnsubscribe = subscribeToAnalytics(user.uid, updateAnalyticsUI);
+
+        // Fetch stored pending tasks from Firestore
+        fetchTasksFirestore(user.uid)
+            .then(fetchedTasks => {
+                tasks = fetchedTasks;
+                renderTasks();
+            })
+            .catch(err => console.error("Error loading tasks:", err));
     } else {
         currentUserUid = null;
         if (analyticsUnsubscribe) {
@@ -220,6 +252,7 @@ monitorAuthState((user) => {
         }
     }
 });
+window.showToast = showToast;
 
 
 // --- Task Logic ---
@@ -239,9 +272,24 @@ taskForm.addEventListener('submit', (e) => {
         completed: false
     };
 
-    tasks.push(newTask);
-    renderTasks();
-    taskForm.reset();
+    if (currentUserUid) {
+        createTaskFirestore(currentUserUid, newTask).then(() => {
+            tasks.push(newTask);
+            renderTasks();
+            taskForm.reset();
+            showToast("Task synced to cloud!", "success");
+        }).catch(err => {
+            console.error("Cloud sync failed:", err);
+            // Still add locally for immediate feedback
+            tasks.push(newTask);
+            renderTasks();
+            taskForm.reset();
+        });
+    } else {
+        tasks.push(newTask);
+        renderTasks();
+        taskForm.reset();
+    }
 });
 
 async function completeTask(id) {
@@ -397,7 +445,15 @@ function showToast(message, type = "success") {
     }, 3000);
 }
 
-function deleteTask(id) {
+async function deleteTask(id) {
+    if (currentUserUid) {
+        try {
+            await delTaskFirestore(currentUserUid, id);
+            showToast("Task deleted!", "success");
+        } catch (error) {
+            console.error("Failed to delete from Firestore:", error);
+        }
+    }
     tasks = tasks.filter(t => t.id !== id);
     renderTasks();
 }
@@ -466,7 +522,7 @@ function renderTasks() {
 
 function createTaskHTML(task) {
     const dateObj = new Date(task.datetime);
-    const formattedDate = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    const formattedDate = dateObj.toLocaleDateString();
     const priorityLower = task.priority.toLowerCase();
     const priorityClass = `priority-${priorityLower}`;
     
@@ -480,7 +536,7 @@ function createTaskHTML(task) {
             <div class="task-info">
                 <span class="task-title">${task.subject}</span>
                 <span class="task-meta">
-                    <span><i class="fa-regular fa-clock"></i> ${formattedDate}</span>
+                    <span><i class="fa-regular fa-calendar-days"></i> ${formattedDate}</span>
                     <span class="priority-badge ${priorityClass}">${priorityBadgeContent}</span>
                 </span>
             </div>
@@ -509,10 +565,15 @@ function updateTimerDisplay() {
 
 function updateProgressRing() {
     const circle = progressRingValue;
+    // Use getBoundingClientRect or getAttribute to handle responsive changes if needed, 
+    // but r.baseVal.value should work if CSS updates it.
+    // To be safe, let's recalculate circumference.
     const radius = circle.r.baseVal.value;
     const circumference = radius * 2 * Math.PI;
+    
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    
     const rawFrac = timerTimeLeft / timerTotalDuration;
-    // Offset calculation
     const offset = circumference - rawFrac * circumference;
     circle.style.strokeDashoffset = offset;
 }

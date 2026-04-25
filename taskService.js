@@ -1,10 +1,60 @@
-import { collection, addDoc, doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, doc, setDoc, getDocs, deleteDoc, query, where, serverTimestamp } from "firebase/firestore";
 import { db } from "./firebase.js";
 
 /**
+ * Saves a new task to Firestore.
+ */
+export const createTaskFirestore = async (uid, taskData) => {
+    try {
+        const tasksRef = doc(db, "users", uid, "tasks", taskData.id);
+        await setDoc(tasksRef, {
+            ...taskData,
+            status: "pending",
+            createdAt: serverTimestamp()
+        });
+        return true;
+    } catch (error) {
+        console.error("Error creating task: ", error);
+        throw error;
+    }
+};
+
+/**
+ * Fetches all pending tasks for a user.
+ */
+export const fetchTasksFirestore = async (uid) => {
+    try {
+        const tasksRef = collection(db, "users", uid, "tasks");
+        const q = query(tasksRef, where("status", "==", "pending"));
+        const querySnapshot = await getDocs(q);
+        
+        const tasks = [];
+        querySnapshot.forEach((doc) => {
+            tasks.push(doc.data());
+        });
+        return tasks;
+    } catch (error) {
+        console.error("Error fetching tasks: ", error);
+        throw error;
+    }
+};
+
+/**
+ * Deletes a task from Firestore.
+ */
+export const delTaskFirestore = async (uid, taskId) => {
+    try {
+        const taskRef = doc(db, "users", uid, "tasks", taskId);
+        await deleteDoc(taskRef);
+        return true;
+    } catch (error) {
+        console.error("Error deleting task: ", error);
+        throw error;
+    }
+};
+
+/**
  * Saves a completed task to Firestore and updates its status.
- * @param {string} uid The active user's ID
- * @param {Object} taskData The raw task object from local state
  */
 export const markTaskDoneFirestore = async (uid, taskData) => {
     try {
