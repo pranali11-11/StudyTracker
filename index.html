@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner & Focus Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- AUTHENTICATION SECTION -->
+    <section id="auth-section" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2 id="auth-title">Welcome Back!</h2>
+                <p id="auth-subtitle">Log in to access your study planner</p>
+            </div>
+            
+            <form id="login-form">
+                <div id="auth-error" class="hidden" style="color: #ef4444; margin-bottom: 15px; font-size: 0.9rem; text-align: center; background: #fee2e2; padding: 10px; border-radius: 6px;"></div>
+                <div class="input-group" id="name-group" style="display: none;">
+                    <label for="displayName">Full Name</label>
+                    <input type="text" id="displayName" placeholder="John Doe">
+                </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="name@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" id="auth-submit-btn" class="btn-primary">Log In</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="#" id="toggle-signup">Sign up</a></p>
+                <div class="demo-notice">
+                    <p><em>(Frontend Mode: Any login works!)</em></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN APP SECTION -->
+    <section id="app-section" class="app-container hidden">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>StudyMaster</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="nav-list">
+                    <li class="nav-item active" data-target="dashboard">
+                        <i class="fa-solid fa-table-columns"></i> Dashboard
+                    </li>
+                    <li class="nav-item" data-target="planner">
+                        <i class="fa-solid fa-calendar-check"></i> Study Planner
+                    </li>
+                    <li class="nav-item" data-target="timer">
+                        <i class="fa-solid fa-stopwatch"></i> Focus Timer
+                    </li>
+                    <li class="nav-item" data-target="analytics">
+                        <i class="fa-solid fa-chart-pie"></i> Analytics
+                    </li>
+                    <li class="nav-item" data-target="games">
+                        <i class="fa-solid fa-gamepad"></i> Brain Games
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">P</div>
+                    <div class="user-info">
+                        <span class="user-name">Prana</span>
+                        <span class="user-role">Student</span>
+                    </div>
+                </div>
+                <button id="logout-btn" class="btn-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="top-header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="date-display" id="current-date">October 24, 2026</div>
+            </header>
+
+            <div class="content-wrapper">
+                
+                <!-- DASHBOARD VIEW -->
+                <div id="view-dashboard" class="view-panel active">
+                    <div class="dashboard-grid">
+                        <div class="dash-card stats-card">
+                            <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div class="stat-details">
+                                <h3>Focus Time</h3>
+                                <p id="dash-total-time">0h 0m</p>
+                            </div>
+                        </div>
+                        <div class="dash-card stats-card">
+                            <div class="stat-icon"><i class="fa-solid fa-check-circle"></i></div>
+                            <div class="stat-details">
+                                <h3>Tasks Completed</h3>
+                                <p id="dash-tasks-done">0</p>
+                            </div>
+                        </div>
+                        <div class="dash-card stats-card">
+                            <div class="stat-icon"><i class="fa-solid fa-fire"></i></div>
+                            <div class="stat-details">
+                                <h3>Daily Streak</h3>
+                                <p id="dash-streak">0 Days</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-split">
+                        <div class="dash-card upcoming-tasks">
+                            <div class="card-header">
+                                <h2>Today's Tasks</h2>
+                                <button class="btn-small btn-primary" id="btn-add-quick-task"><i class="fa-solid fa-plus"></i> Add</button>
+                            </div>
+                            <ul id="dashboard-task-list" class="task-list">
+                                <!-- Tasks injected here -->
+                            </ul>
+                        </div>
+                        <div class="dash-card quick-timer">
+                            <div class="card-header">
+                                <h2>Jump into Focus</h2>
+                            </div>
+                            <div class="quick-timer-display">25:00</div>
+                            <button class="btn-primary w-100" id="btn-quick-start">Start Session</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PLANNER VIEW -->
+                <div id="view-planner" class="view-panel hidden">
+                    <div class="planner-layout">
+                        <div class="task-creation-panel dash-card">
+                            <h2>Create Task</h2>
+                            <form id="task-form">
+                                <div class="input-group">
+                                    <label>Subject</label>
+                                    <input type="text" id="task-subject" required placeholder="e.g. Mathematics">
+                                </div>
+                                <div class="input-group">
+                                    <label>Description</label>
+                                    <textarea id="task-desc" rows="3" placeholder="What are you studying?"></textarea>
+                                </div>
+                                <div class="input-split">
+                                    <div class="input-group">
+                                        <label>Date</label>
+                                        <input type="date" id="task-date" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Priority</label>
+                                        <select id="task-priority" name="priority">
+                                            <option value="high">🔴 High</option>
+                                            <option value="medium" selected>🟡 Medium</option>
+                                            <option value="low">🟢 Low</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn-primary w-100">Add Task</button>
+                            </form>
+                        </div>
+                        <div class="task-list-panel dash-card">
+                            <div class="planner-header-row">
+                                <h2>Upcoming Tasks</h2>
+                                <select id="sort-select" class="sort-dropdown">
+                                    <option value="priority">⚡ Priority</option>
+                                    <option value="date">📅 Due Date</option>
+                                    <option value="subject">📚 Subject</option>
+                                    <option value="added">🕐 Recently Added</option>
+                                </select>
+                            </div>
+                            <ul id="planner-task-list" class="task-list full-list">
+                                <!-- Planner tasks injected here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TIMER VIEW -->
+                <div id="view-timer" class="view-panel hidden">
+                    <div class="timer-container dash-card">
+                        <div class="timer-tabs">
+                            <button class="timer-tab active" data-mode="pomodoro">Pomodoro</button>
+                            <button class="timer-tab" data-mode="shortBreak">Short Break</button>
+                            <button class="timer-tab" data-mode="longBreak">Long Break</button>
+                        </div>
+                        
+                        <div class="timer-circle">
+                            <svg class="progress-ring" width="250" height="250">
+                                <circle class="progress-ring__circle" stroke="#e2e8f0" stroke-width="8" fill="transparent" r="116" cx="125" cy="125"/>
+                                <circle class="progress-ring__value" stroke="#3b82f6" stroke-width="8" fill="transparent" r="116" cx="125" cy="125"/>
+                            </svg>
+                            <div class="timer-display" id="main-timer">25:00</div>
+                        </div>
+
+                        <div class="timer-controls">
+                            <button id="timer-start" class="btn-timer btn-start">Start</button>
+                            <button id="timer-pause" class="btn-timer btn-pause hidden">Pause</button>
+                            <button id="timer-reset" class="btn-timer btn-reset"><i class="fa-solid fa-rotate-right"></i></button>
+                        </div>
+                        
+                        <div style="margin-top: 10px; margin-bottom: 20px;">
+                            <button id="enter-focus-btn" class="btn-primary w-100" style="background-color: var(--warning); color: #fff;">
+                                <i class="fa-solid fa-lock"></i> Enter Focus Mode
+                            </button>
+                        </div>
+
+                        <div class="current-focus-selector">
+                            <p>Working on:</p>
+                            <select id="focus-task-select">
+                                <option value="">Select a task...</option>
+                                <!-- Map tasks here -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-analytics" class="view-panel hidden">
+                    <div id="analytics-loader" class="analytics-loader">
+                        <div class="skeleton-chart"></div>
+                        <p>Syncing your progress...</p>
+                    </div>
+                    
+                    <div id="analytics-content" class="hidden">
+                        <div class="analytics-summary-grid">
+                            <div class="dash-card stats-card">
+                                <div class="stat-icon"><i class="fa-solid fa-award"></i></div>
+                                <div class="stat-details">
+                                    <h3>Total Tasks</h3>
+                                    <p id="stat-total-done">0</p>
+                                </div>
+                            </div>
+                            <div class="dash-card stats-card">
+                                <div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div>
+                                <div class="stat-details">
+                                    <h3>Done Today</h3>
+                                    <p id="stat-today-done">0</p>
+                                </div>
+                            </div>
+                            <div class="dash-card stats-card">
+                                <div class="stat-icon"><i class="fa-solid fa-calendar-week"></i></div>
+                                <div class="stat-details">
+                                    <h3>This Week</h3>
+                                    <p id="stat-week-done">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analytics-grid">
+                            <div class="dash-card">
+                                <h2>14-Day Productivity Trend</h2>
+                                <div class="chart-container-real">
+                                    <canvas id="trendChart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="dash-card">
+                                <h2>Subject Breakdown</h2>
+                                <div class="chart-container-real">
+                                    <canvas id="subjectChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="analytics-empty-state" class="hidden" style="text-align: center; padding: 40px;">
+                            <div style="font-size: 3rem; margin-bottom: 20px;">📊</div>
+                            <h2>No Data Yet</h2>
+                            <p style="color: var(--text-muted);">Complete some tasks to see your personalized analytics!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GAMES VIEW -->
+                <div id="view-games" class="view-panel hidden">
+                    <div id="games-main-view">
+                        <div class="card-header" style="margin-bottom: 5px;">
+                            <h2>Brain Games</h2>
+                        </div>
+                        <p style="color: var(--text-muted); margin-bottom: 25px;">Take a timed break and play a focus game!</p>
+                        <div class="games-grid">
+                            <div class="dash-card game-card">
+                                <div class="game-icon">🧠</div>
+                                <h3>Memory Match</h3>
+                                <p>Uncover and match emoji pairs to improve your short-term recall.</p>
+                                <span class="game-timer-badge">⏱ 60 seconds</span>
+                                <button class="btn-primary w-100 btn-play-game" data-game="memory">Play Now</button>
+                            </div>
+                            <div class="dash-card game-card">
+                                <div class="game-icon">🧮</div>
+                                <h3>Math Sprint</h3>
+                                <p>Solve as many rapid-fire arithmetic problems as you can.</p>
+                                <span class="game-timer-badge">⏱ 45 seconds</span>
+                                <button class="btn-primary w-100 btn-play-game" data-game="math">Play Now</button>
+                            </div>
+                            <div class="dash-card game-card">
+                                <div class="game-icon">🔤</div>
+                                <h3>Word Scramble</h3>
+                                <p>Unscramble 5-letter focus words quickly.</p>
+                                <span class="game-timer-badge">⏱ 30 seconds</span>
+                                <button class="btn-primary w-100 btn-play-game" data-game="scramble">Play Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="game-arena" class="hidden">
+                        <div class="game-arena-header">
+                            <h2 id="arena-title">Game Title</h2>
+                            <div class="arena-timer" id="arena-timer">00:00</div>
+                            <button id="btn-exit-game" class="btn-timer btn-pause" style="padding: 8px 24px; font-size: 0.9rem;">Quit</button>
+                        </div>
+                        <div id="game-container" class="game-container">
+                            <!-- game renders here dynamically -->
+                        </div>
+                        <div id="game-over-card" class="dash-card hidden" style="text-align: center; max-width: 400px; margin: 40px auto;">
+                            <h2>Time's Up!</h2>
+                            <p id="game-score-msg" style="font-size: 1.5rem; margin: 20px 0; font-weight: bold; color: var(--primary-color);">Score: 0</p>
+                            <div style="display: flex; gap: 15px; justify-content: center;">
+                                <button id="btn-play-again" class="btn-primary">Play Again</button>
+                                <button id="btn-back-games" class="btn-logout" style="width: auto; padding: 10px 20px;">Back to Games</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </section>
+
+    <!-- STRICT FOCUS OVERLAY -->
+    <div id="focus-overlay" class="hidden">
+        <div id="focus-header">🎯 FOCUS MODE — Stay on task!</div>
+        <div id="focus-timer-display">25:00</div>
+        <button id="exit-focus-btn">🚪 Exit Focus Mode</button>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
