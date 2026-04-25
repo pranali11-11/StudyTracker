@@ -1,5 +1,5 @@
 // --- StudyBot: Your Personal Study Assistant ---
-const GEMINI_API_KEY = 'AIzaSyCGizJauXLVSn0KpgfeplJIrS9-FfYr1u4';
+const GEMINI_API_KEY = 'AIzaSyA-OsXPP6wuc_7qX441m4YjGI4hcRx5JNE';
 
 const botToggle = document.getElementById('study-bot-toggle');
 const botContainer = document.getElementById('study-bot-container');
@@ -175,6 +175,6 @@ async function getStudentContext() {
         focus: document.getElementById('dash-total-time')?.textContent || "0h 0m",
         streak: document.getElementById('dash-streak')?.textContent || "0 Days",
         tasks: Array.from(document.querySelectorAll('#dashboard-task-list .task-item'))
-                    .map(el => el.querySelector('.task-title')?.textContent).join(', ') || "none"
+            .map(el => el.querySelector('.task-title')?.textContent).join(', ') || "none"
     };
 }
