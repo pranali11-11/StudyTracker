@@ -61,6 +61,7 @@ async function sendMessage() {
 
     const models = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-2.0-flash-lite'];
     let success = false;
+    let lastErr = 'Unknown error';
 
     for (const model of models) {
         try {
@@ -93,15 +94,15 @@ async function sendMessage() {
             break;
 
         } catch (err) {
+            lastErr = err.message;
             console.error(`Model ${model} failed:`, err.message);
         }
     }
 
     if (!success) {
-        // Remove the user message we added since it failed
         chatHistory.pop();
         removeTypingIndicator(typingId);
-        addMessageToUI("❌ Something went wrong. Please try again!", 'bot');
+        addMessageToUI(`❌ Error: ${lastErr}`, 'bot');
     }
 
     botInput.disabled = false;
