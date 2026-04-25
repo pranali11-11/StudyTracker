@@ -1,5 +1,5 @@
 // --- StudyBot: Your Personal Study Assistant ---
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyCGizJauXLVSn0KpgfeplJIrS9-FfYr1u4';
 
 const botToggle = document.getElementById('study-bot-toggle');
 const botContainer = document.getElementById('study-bot-container');
