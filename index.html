@@ -15,6 +15,7 @@
     <section id="auth-section" class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
+<<<<<<< HEAD
                 <h2 id="auth-title">Welcome Back!</h2>
                 <p id="auth-subtitle">Log in to access your study planner</p>
             </div>
@@ -25,6 +26,13 @@
                     <label for="displayName">Full Name</label>
                     <input type="text" id="displayName" placeholder="John Doe">
                 </div>
+=======
+                <h2>Welcome Back!</h2>
+                <p>Log in to access your study planner</p>
+            </div>
+            
+            <form id="login-form">
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
                 <div class="input-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" placeholder="name@example.com" required>
@@ -33,7 +41,11 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="••••••••" required>
                 </div>
+<<<<<<< HEAD
                 <button type="submit" id="auth-submit-btn" class="btn-primary">Log In</button>
+=======
+                <button type="submit" class="btn-primary">Log In</button>
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
             </form>
 
             <div class="auth-footer">
@@ -114,7 +126,11 @@
                             <div class="stat-icon"><i class="fa-solid fa-fire"></i></div>
                             <div class="stat-details">
                                 <h3>Daily Streak</h3>
+<<<<<<< HEAD
                                 <p id="dash-streak">0 Days</p>
+=======
+                                <p>1 Day</p>
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
                             </div>
                         </div>
                     </div>
@@ -226,6 +242,7 @@
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 <div id="view-analytics" class="view-panel hidden">
                     <div id="analytics-loader" class="analytics-loader">
                         <div class="skeleton-chart"></div>
@@ -269,14 +286,60 @@
                                 <h2>Subject Breakdown</h2>
                                 <div class="chart-container-real">
                                     <canvas id="subjectChart"></canvas>
+=======
+                <!-- ANALYTICS VIEW -->
+                <div id="view-analytics" class="view-panel hidden">
+                    <div class="analytics-grid">
+                        <div class="dash-card">
+                            <h2>Weekly Focus Time</h2>
+                            <div class="chart-container">
+                                <!-- Dummy CSS Bar Chart -->
+                                <div class="css-chart">
+                                    <div class="bar-group"><div class="bar" style="height: 40%"></div><span>Mon</span></div>
+                                    <div class="bar-group"><div class="bar" style="height: 60%"></div><span>Tue</span></div>
+                                    <div class="bar-group"><div class="bar" style="height: 30%"></div><span>Wed</span></div>
+                                    <div class="bar-group"><div class="bar" style="height: 80%"></div><span>Thu</span></div>
+                                    <div class="bar-group"><div class="bar" style="height: 50%"></div><span>Fri</span></div>
+                                    <div class="bar-group"><div class="bar" style="height: 20%"></div><span>Sat</span></div>
+                                    <div class="bar-group"><div class="bar" style="height: 10%"></div><span>Sun</span></div>
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
                                 </div>
                             </div>
                         </div>
                         
+<<<<<<< HEAD
                         <div id="analytics-empty-state" class="hidden" style="text-align: center; padding: 40px;">
                             <div style="font-size: 3rem; margin-bottom: 20px;">📊</div>
                             <h2>No Data Yet</h2>
                             <p style="color: var(--text-muted);">Complete some tasks to see your personalized analytics!</p>
+=======
+                        <div class="dash-card">
+                            <div class="card-header">
+                                <h2>Global Leaderboard</h2>
+                            </div>
+                            <ul class="leaderboard-list">
+                                <li>
+                                    <span class="rank gold">1</span>
+                                    <span class="lb-name">Alex M.</span>
+                                    <span class="lb-score">32h 15m</span>
+                                </li>
+                                <li>
+                                    <span class="rank silver">2</span>
+                                    <span class="lb-name">Sarah T.</span>
+                                    <span class="lb-score">28h 40m</span>
+                                </li>
+                                <li class="highlight">
+                                    <span class="rank bronze">3</span>
+                                    <span class="lb-name">Prana (You)</span>
+                                    <span class="lb-score">25h 10m</span>
+                                </li>
+                                <li>
+                                    <span class="rank">4</span>
+                                    <span class="lb-name">John D.</span>
+                                    <span class="lb-score">19h 05m</span>
+                                </li>
+                            </ul>
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
                         </div>
                     </div>
                 </div>
@@ -344,9 +407,13 @@
         <button id="exit-focus-btn">🚪 Exit Focus Mode</button>
     </div>
 
+<<<<<<< HEAD
     <!-- TOAST NOTIFICATIONS -->
     <div id="toast-container" class="toast-container"></div>
 
     <script type="module" src="script.js"></script>
+=======
+    <script src="script.js"></script>
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
 </body>
 </html>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { signupUser, loginUser, logoutUser, monitorAuthState } from './authService.js';
 import { markTaskDoneFirestore } from './taskService.js';
 import { subscribeToAnalytics } from './analyticsService.js';
@@ -8,6 +9,8 @@ let analyticsUnsubscribe = null;
 let trendChartInstance = null;
 let subjectChartInstance = null;
 
+=======
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
 // --- DOM Elements ---
 const authSection = document.getElementById('auth-section');
 const appSection = document.getElementById('app-section');
@@ -42,8 +45,30 @@ const btnQuickStart = document.getElementById('btn-quick-start');
 const dashTasksDone = document.getElementById('dash-tasks-done');
 const dashTotalTime = document.getElementById('dash-total-time');
 
+<<<<<<< HEAD
 // --- Global State Context ---
 let tasks = [];
+=======
+// --- Global State Context (Dummy Data) ---
+let tasks = [
+    {
+        id: 'userTask1',
+        subject: 'Mathematics',
+        description: 'Complete integration exercises',
+        datetime: '2026-10-24T14:30',
+        priority: 'High',
+        completed: false
+    },
+    {
+        id: 'userTask2',
+        subject: 'Computer Science',
+        description: 'Read chapter on Reactivity',
+        datetime: '2026-10-25T10:00',
+        priority: 'Medium',
+        completed: false
+    }
+];
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
 
 let totalFocusTimeMinutes = 0;
 let tasksCompleted = 0;
@@ -111,6 +136,7 @@ btnQuickStart.addEventListener('click', () => {
     if(!isTimerRunning) timerStart.click();
 });
 
+<<<<<<< HEAD
 // --- Authentication & Session Flow ---
 const toggleSignupBtn = document.getElementById('toggle-signup');
 const authTitle = document.getElementById('auth-title');
@@ -220,6 +246,23 @@ monitorAuthState((user) => {
             timerPause.click();
             timerReset.click();
         }
+=======
+// --- Authentication UI Flow (Dummy) ---
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // In Front-End only mode, simply log the user in
+    authSection.classList.add('hidden');
+    appSection.classList.remove('hidden');
+});
+
+logoutBtn.addEventListener('click', () => {
+    appSection.classList.add('hidden');
+    authSection.classList.remove('hidden');
+    // reset timer
+    if (isTimerRunning) {
+        timerPause.click();
+        timerReset.click();
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
     }
 });
 
@@ -246,6 +289,7 @@ taskForm.addEventListener('submit', (e) => {
     taskForm.reset();
 });
 
+<<<<<<< HEAD
 async function completeTask(id) {
     console.log("completeTask triggered for ID:", id);
     if (!currentUserUid) {
@@ -399,6 +443,18 @@ function showToast(message, type = "success") {
     }, 3000);
 }
 
+=======
+function completeTask(id) {
+    const taskIndex = tasks.findIndex(t => t.id === id);
+    if (taskIndex > -1) {
+        tasks[taskIndex].completed = true;
+        tasksCompleted++;
+        updateStatsDisplay();
+        renderTasks();
+    }
+}
+
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
 function deleteTask(id) {
     tasks = tasks.filter(t => t.id !== id);
     renderTasks();

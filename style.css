@@ -1007,6 +1007,7 @@ a:hover {
     box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
 }
 
+<<<<<<< HEAD
 /* --- TOAST NOTIFICATIONS --- */
 .toast-container {
     position: fixed;
@@ -1095,3 +1096,5 @@ a:hover {
     100% { background-position: -200% 0; }
 }
 
+=======
+>>>>>>> b8c3dbf639a85ed0e480c53e35d0b9c670f9f005
