@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script type="module" crossorigin src="/StudyTracker/assets/index-DpG0444-.js"></script>
-  <link rel="stylesheet" crossorigin href="/StudyTracker/assets/index-5JNj2y2v.css">
+  <script type="module" crossorigin src="/StudyTracker/assets/index-DodDW3Qq.js"></script>
+  <link rel="stylesheet" crossorigin href="/StudyTracker/assets/index-KccmxLnF.css">
 </head>
 <body>
 
@@ -34,6 +34,10 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="••••••••" required>
                 </div>
+                <div class="input-group" id="confirm-password-group" style="display: none;">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="••••••••">
+                </div>
                 <button type="submit" id="auth-submit-btn" class="btn-primary">Log In</button>
             </form>
 
@@ -48,7 +52,16 @@
 
     <!-- MAIN APP SECTION -->
     <section id="app-section" class="app-container hidden">
-        <!-- SIDEBAR -->
+        <!-- MOBILE HEADER -->
+        <header class="mobile-header">
+            <div class="mobile-brand">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>StudyMaster</span>
+            </div>
+            <div class="mobile-user-avatar" id="mobile-avatar">P</div>
+        </header>
+
+        <!-- SIDEBAR / BOTTOM NAV -->
         <aside class="sidebar">
             <div class="sidebar-brand">
                 <i class="fa-solid fa-graduation-cap"></i>
@@ -60,16 +73,16 @@
                         <i class="fa-solid fa-table-columns"></i> Dashboard
                     </li>
                     <li class="nav-item" data-target="planner">
-                        <i class="fa-solid fa-calendar-check"></i> Study Planner
+                        <i class="fa-solid fa-calendar-check"></i> Planner
                     </li>
                     <li class="nav-item" data-target="timer">
-                        <i class="fa-solid fa-stopwatch"></i> Focus Timer
+                        <i class="fa-solid fa-stopwatch"></i> Timer
                     </li>
                     <li class="nav-item" data-target="analytics">
                         <i class="fa-solid fa-chart-pie"></i> Analytics
                     </li>
                     <li class="nav-item" data-target="games">
-                        <i class="fa-solid fa-gamepad"></i> Brain Games
+                        <i class="fa-solid fa-gamepad"></i> Games
                     </li>
                 </ul>
             </nav>
@@ -348,6 +361,34 @@
 
     <!-- TOAST NOTIFICATIONS -->
     <div id="toast-container" class="toast-container"></div>
+
+    <!-- STUDY BOT UI -->
+    <div id="study-bot-toggle" class="study-bot-fab" title="Chat with StudyBot">
+        <i class="fa-solid fa-robot"></i>
+        <div class="bot-badge">AI</div>
+    </div>
+
+    <div id="study-bot-container" class="study-bot-window hidden">
+        <div class="bot-header">
+            <div class="bot-header-info">
+                <div class="bot-avatar"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                    <h3>StudyBot</h3>
+                    <span class="bot-status">Online & Ready</span>
+                </div>
+            </div>
+            <button id="close-bot" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="bot-messages" class="bot-messages">
+            <div class="bot-message bot">
+                Hey! I'm StudyBot. I can help you plan your study, set timers, and explain concepts. What's on your mind today? 🎓
+            </div>
+        </div>
+        <div class="bot-input-area">
+            <input type="text" id="bot-input" placeholder="Ask me anything...">
+            <button id="btn-send-bot"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
 
 </body>
 </html>
